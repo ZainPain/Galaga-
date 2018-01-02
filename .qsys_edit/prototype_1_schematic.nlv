@@ -1,0 +1,30 @@
+# # File gsaved with Nlview version 6.3.8  2013-12-19 bk=1.2992 VDI=34 GEI=35
+# 
+preplace inst prototype_1.switches -pg 1 -lvl 3 -y 760
+preplace inst prototype_1.sdram -pg 1 -lvl 3 -y 100
+preplace inst prototype_1.onchip_memory2_0 -pg 1 -lvl 3 -y 370
+preplace inst prototype_1.nios2_qsys_0.reset_bridge -pg 1
+preplace inst prototype_1 -pg 1 -lvl 1 -y 40 -regy -20
+preplace inst prototype_1.nios2_qsys_0.cpu -pg 1
+preplace inst prototype_1.nios2_qsys_0 -pg 1 -lvl 2 -y 350
+preplace inst prototype_1.clk_0 -pg 1 -lvl 1 -y 420
+preplace inst prototype_1.accum_reset -pg 1 -lvl 2 -y 30
+preplace inst prototype_1.sdram_pll -pg 1 -lvl 3 -y 200
+preplace inst prototype_1.accum_up -pg 1 -lvl 2 -y 220
+preplace inst prototype_1.sysid_qsys_0 -pg 1 -lvl 3 -y 570
+preplace inst prototype_1.nios2_qsys_0.clock_bridge -pg 1
+preplace inst prototype_1.led -pg 1 -lvl 3 -y 660
+preplace netloc EXPORT<net_container>prototype_1</net_container>(SLAVE)prototype_1.reset,(SLAVE)clk_0.clk_in_reset) 1 0 1 NJ
+preplace netloc EXPORT<net_container>prototype_1</net_container>(SLAVE)prototype_1.accum_r_wire,(SLAVE)accum_reset.external_connection) 1 0 2 NJ 60 NJ
+preplace netloc POINT_TO_POINT<net_container>prototype_1</net_container>(MASTER)sdram_pll.c0,(SLAVE)sdram.clk) 1 2 2 780 350 1020
+preplace netloc INTERCONNECT<net_container>prototype_1</net_container>(SLAVE)nios2_qsys_0.debug_mem_slave,(SLAVE)sysid_qsys_0.control_slave,(SLAVE)switches.s1,(SLAVE)sdram_pll.pll_slave,(MASTER)nios2_qsys_0.instruction_master,(SLAVE)led.s1,(SLAVE)accum_reset.s1,(MASTER)nios2_qsys_0.data_master,(SLAVE)sdram.s1,(SLAVE)accum_up.s1,(SLAVE)onchip_memory2_0.s1) 1 1 2 340 190 740
+preplace netloc EXPORT<net_container>prototype_1</net_container>(SLAVE)sdram.wire,(SLAVE)prototype_1.sdram_wire) 1 0 3 NJ 150 NJ 150 NJ
+preplace netloc FAN_OUT<net_container>prototype_1</net_container>(SLAVE)accum_up.clk,(MASTER)clk_0.clk,(SLAVE)sysid_qsys_0.clk,(SLAVE)led.clk,(SLAVE)switches.clk,(SLAVE)sdram_pll.inclk_interface,(SLAVE)accum_reset.clk,(SLAVE)nios2_qsys_0.clk,(SLAVE)onchip_memory2_0.clk1) 1 1 2 300 210 760
+preplace netloc EXPORT<net_container>prototype_1</net_container>(SLAVE)prototype_1.clk,(SLAVE)clk_0.clk_in) 1 0 1 NJ
+preplace netloc FAN_OUT<net_container>prototype_1</net_container>(SLAVE)accum_up.reset,(SLAVE)sysid_qsys_0.reset,(SLAVE)onchip_memory2_0.reset1,(SLAVE)sdram.reset,(MASTER)clk_0.clk_reset,(SLAVE)led.reset,(SLAVE)switches.reset,(SLAVE)sdram_pll.inclk_interface_reset,(SLAVE)accum_reset.reset,(SLAVE)nios2_qsys_0.reset) 1 1 2 320 170 700
+preplace netloc EXPORT<net_container>prototype_1</net_container>(MASTER)prototype_1.sdram_clk,(MASTER)sdram_pll.c1) 1 3 1 N
+preplace netloc EXPORT<net_container>prototype_1</net_container>(SLAVE)switches.external_connection,(SLAVE)prototype_1.switch_wire) 1 0 3 NJ 790 NJ 790 NJ
+preplace netloc EXPORT<net_container>prototype_1</net_container>(SLAVE)prototype_1.accum_up_wire,(SLAVE)accum_up.external_connection) 1 0 2 NJ 250 NJ
+preplace netloc EXPORT<net_container>prototype_1</net_container>(SLAVE)led.external_connection,(SLAVE)prototype_1.led_wire) 1 0 3 NJ 690 NJ 690 NJ
+levelinfo -pg 1 0 90 1130
+levelinfo -hier prototype_1 100 130 460 830 1040

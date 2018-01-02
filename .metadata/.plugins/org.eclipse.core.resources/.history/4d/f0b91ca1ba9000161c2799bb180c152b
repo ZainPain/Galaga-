@@ -1,0 +1,163 @@
+// Main.c - makes LEDG0 on DE2-115 board blink if NIOS II is set up correctly
+// for ECE 385 - University of Illinois - Electrical and Computer Engineering
+// Author: Zuofu Cheng
+	// 1.5 LEDG0 blinks
+	//  .5 Accumulator clears to zero on pressing 'reset'
+	// 1.0 Accumulator increments by value inputed by switches by pressing 'accumulate'
+	//  .5 Accumulator overflows to zero  at 255
+	//  .5 input and output constraints are fully specified ( valid Timequest timing analyzer
+	// 		analysis after compilation
+	// 1.0 correctly answer  one TA-designed embedded question
+
+	// 				ADDRESSES
+	// 		switches = x60
+	//		accum reset = x10
+	// 		accum accum = x90
+/*int badd(int n1, int n2){
+    int carry, sum;
+    carry = (n1 & n2) << 1; // Find bits that are used for carry
+    sum = n1 ^ n2; // Add each bit, discard carry.
+    if (sum & carry) // If bits match, add current sum and carry.
+        return badd(sum, carry);
+    else
+        return sum ^ carry; // Return the sum.
+}
+
+int bsub(int n1, int n2){
+    // Add two's complement and return.
+    return badd(n1, badd(~n2, 1));
+}*/
+/*
+int main()
+{
+	// LEDG0 BLINKS
+	unsigned int i = 0;
+	volatile unsigned int *LED_PIO = (unsigned int*)0x30; //make a pointer to access the PIO block
+		// volatile is a keyword that allows it to change through means other than code updates
+		// be changed by an specific line of code.
+	/*typedef struct
+	{
+		unsigned int volatile data;
+		unsigned int volatile direction;
+		unsigned int volatile interrupt_mask;
+	} Nios_PIO;
+		Nios_PIO *LED_PIO = (Nios_PIO*) 0x30;
+		Nios_PIO *Switch = (Nios_PIO*) 0x60;
+		Nios_PIO *Accum = (Nios_PIO*) 0x90;
+		Nios_PIO *RESET = (Nios_PIO*) 0x10;*/
+	/**LED_PIO = 0; //clear all LEDs
+	volatile unsigned int *Switch = (unsigned int*) 0x60;
+	volatile unsigned int *Areset = (unsigned int*) 0x10;
+	volatile unsigned int *Accum = (unsigned int*) 0x90;
+	// setting reset to high
+	*Areset = 0;	//reset is off
+	*Accum = 0;
+	*Switch = 0;
+	*LED_PIO = 0x3; //set LSB
+	i = 0x3;
+	while ( (1+1) != 3) //infinite loop
+	{
+		if(!*Areset || i >= 0x0ff)
+		{
+			 i = 0x0;
+			//*LED_PIO = 0x0;
+		}
+		if(!*Accum)
+		{
+			i += *Switch;
+
+
+		}
+		*LED_PIO = i;
+	}
+	return 1; //never gets here
+}
+*/
+
+
+
+		// Main.c - makes LEDG0 on DE2-115 board blink if NIOS II is set up correctly
+		// for ECE 385 - University of Illinois - Electrical and Computer Engineering
+		// Author: Zuofu Cheng
+			// 1.5 LEDG0 blinks
+			//  .5 Accumulator clears to zero on pressing 'reset'
+			// 1.0 Accumulator increments by value inputed by switches by pressing 'accumulate'
+			//  .5 Accumulator overflows to zero  at 255
+			//  .5 input and output constraints are fully specified ( valid Timequest timing analyzer
+			// 		analysis after compilation
+			// 1.0 correctly answer  one TA-designed embedded question
+
+			// 				ADDRESSES
+			// 		switches = x60
+			//		accum reset = x10
+			// 		accum accum = x90
+		/*int badd(int n1, int n2){
+		    int carry, sum;
+		    carry = (n1 & n2) << 1; // Find bits that are used for carry
+		    sum = n1 ^ n2; // Add each bit, discard carry.
+		    if (sum & carry) // If bits match, add current sum and carry.
+		        return badd(sum, carry);
+		    else
+		        return sum ^ carry; // Return the sum.
+		}
+
+		int bsub(int n1, int n2){
+		    // Add two's complement and return.
+		    return badd(n1, badd(~n2, 1));
+		}*/
+			/*typedef struct
+			{
+				unsigned int volatile data;
+				unsigned int volatile direction;
+				unsigned int volatile interrupt_mask;
+			} Nios_PIO;
+				Nios_PIO *LED_PIO = (Nios_PIO*) 0x30;
+				Nios_PIO *Switch = (Nios_PIO*) 0x60;
+				Nios_PIO *Accum = (Nios_PIO*) 0x90;
+				Nios_PIO *RESET = (Nios_PIO*) 0x10;*/
+
+		#define OVERFLOW_MAX 255
+
+		int main()
+		{
+			// LEDG0 BLINKS
+			unsigned int i = 0;
+			int add_pending = 0;
+			volatile unsigned int *LED_PIO = (unsigned int*)0x30; //make a pointer to access the PIO block
+				// volatile is a keyword that allows it to change through means other than code updates
+				// be changed by an specific line of code.
+
+			*LED_PIO = 0; //clear all LEDs
+			volatile unsigned int *Switch = (unsigned int*) 0x60;
+			volatile unsigned int *Areset = (unsigned int*) 0x10;
+			volatile unsigned int *Accum = (unsigned int*) 0x90;
+			// setting reset to high
+			*Areset = 0;	//reset is off
+			*Accum = 0;
+			*Switch = 0;
+			*LED_PIO = 0x3; //set LSB
+			i = 0x3;
+			while (1) //infinite loop
+			{
+				if(!*Areset)
+				{
+					 i = 0x0;
+				}
+				if(!*Accum)
+				{
+					add_pending = 1;
+				}
+				if(*Accum && add_pending)
+				{
+					i += *Switch;
+					add_pending = 0;
+				}
+				if(i > OVERFLOW_MAX) // so that 256 overflows to 0. 0xff is okay though.
+				{
+					i -= OVERFLOW_MAX;
+				}
+				*LED_PIO = i;
+			}
+			return 0; //never gets here
+		}
+
