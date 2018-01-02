@@ -1,0 +1,4 @@
+[top left, top right, bottom left, bottom right]
+ship: [{184,55},{198,55},{184,70},{198,70}]
+
+198 - 184 = 15
